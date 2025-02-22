@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kaibur-tasks-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kaibur-tasks
+  template:
+    metadata:
+      labels:
+        app: kaibur-tasks
+    spec:
+      containers:
+        - name: kaibur-tasks
+          image: kaibur-tasks:latest   # Replace with your Docker image name
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATA_MONGODB_URI
+              value: "mongodb://mongodb-service:27017/taskdb"  # MongoDB URI (Service name used in Kubernetes)
+
