@@ -31,4 +31,69 @@ All tasks are stored in a **MongoDB** database.
 
 ## **Project Structure**
 
-src/ ├── main/ │ ├── java/ │ │ └── com/ │ │ └── example/ │ │ └── Kaibur_tasks/ │ │ ├── controller/ # API Controllers │ │ │ ├── TaskController.java │ │ │ └── TaskExecutionController.java │ │ ├── model/ # Task and TaskExecution Models │ │ │ ├── Task.java │ │ │ └── TaskExecution.java │ │ ├── repository/ # MongoDB Repositories │ │ │ └── TaskRepository.java │ │ └── service/ # Business Logic │ │ ├── TaskService.java │ │ └── TaskExecutionService.java │ ├── resources/ │ │ └── application.properties # MongoDB Configuration ├── pom.xml # Maven Dependencies
+
+### **1. Controller Directory** (`controller/`)
+This directory contains the API controllers for handling requests.
+
+- **TaskController.java**: Handles CRUD operations for tasks.
+- **TaskExecutionController.java**: Handles execution-related operations for tasks.
+
+### **2. Model Directory** (`model/`)
+This directory contains the data models used by the application.
+
+- **Task.java**: Defines the Task object, with fields like `id`, `name`, `owner`, `command`, and `taskExecutions`.
+- **TaskExecution.java**: Defines the TaskExecution object, with fields like `startTime`, `endTime`, and `output`.
+
+### **3. Repository Directory** (`repository/`)
+This directory contains MongoDB repositories that handle database operations.
+
+- **TaskRepository.java**: Provides methods to interact with the `tasks` collection in MongoDB, including search functionality.
+
+### **4. Service Directory** (`service/`)
+This directory contains the business logic and interactions with the database.
+
+- **TaskService.java**: Contains methods for creating, updating, deleting tasks, and executing shell commands.
+- **TaskExecutionService.java**: Contains methods for managing task execution, such as saving output and execution time.
+
+---
+
+## **Setup and Installation**
+
+### **1. Prerequisites**
+
+Before you begin, ensure you have the following installed:
+
+- **Java 17+**: Ensure you have Java 17 or later installed. You can verify by running:
+  ```bash
+  java -version
+MongoDB: Install MongoDB locally or use a remote MongoDB instance. Make sure MongoDB is running on localhost:27017.
+
+Maven: Ensure Maven is installed. You can verify by running:
+
+```
+mvn -verion
+
+```
+
+## Clone the Repository
+ Clone the repository to your local machine:
+
+  ```
+  git clone https://github.com/yourusername/kaibur-tasks.git
+
+  ```
+## Build and Run the Application
+  After cloning the repository, navigate to the project directory and build the project using Maven:
+
+  ```
+  cd kaibur-tasks
+
+  mvn clean install # on successfull build og JAR file
+
+  mvn spring-boot:run
+
+  ```
+The application will start running on http://localhost:8080.
+
+
+
