@@ -106,8 +106,8 @@ For a local instance, the default configuration will be: in src/resource/applica
 
 ## output 
 
-  ```
+  ``
     ![image](https://github.com/user-attachments/assets/ffb35d09-39e3-4591-8981-30261390f1b4)
-  ```
+
 
 
