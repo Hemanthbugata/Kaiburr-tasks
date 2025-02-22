@@ -95,5 +95,19 @@ mvn -verion
   ```
 The application will start running on http://localhost:8080.
 
+##  MongoDB Setup
+Ensure MongoDB is running on your local machine or update the connection URI in the application.properties file.
+
+For a local instance, the default configuration will be: in src/resource/application-properties.
+
+```
+  spring.data.mongodb.uri=mongodb://localhost:27017/taskdb
+```
+
+## output 
+
+  ```
+    ![image](https://github.com/user-attachments/assets/ffb35d09-39e3-4591-8981-30261390f1b4)
+  ```
 
 
