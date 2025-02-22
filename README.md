@@ -110,4 +110,53 @@ For a local instance, the default configuration will be: in src/resource/applica
     ![image](https://github.com/user-attachments/assets/ffb35d09-39e3-4591-8981-30261390f1b4)
 
 
+## List of end-points 
 
+  1. GET tasks (Fetch All Tasks)
+    To fetch all tasks from MongoDB:
+```
+    curl -X GET http://localhost:8080/tasks
+```
+![image](https://github.com/user-attachments/assets/ba98321c-cf82-416c-b742-3c1a8b6e3dd6)
+
+  2. GET task by ID (Fetch Task by ID)
+```
+  curl -X GET http://localhost:8080/tasks/123
+
+```
+  ![image](https://github.com/user-attachments/assets/e3b95fe7-3390-40ab-a0b8-20fdd98532f9)
+
+  3. PUT a new Task (Create or Update a Task)
+    To create or update a task, pass a JSON object with task details.
+```
+curl -X PUT http://localhost:8080/tasks -H "Content-Type: application/json" -d '{
+    "id": "129",
+    "name": "Print Hello",
+    "owner": "Hemanth Naidu Bugatha",
+    "command": "echo Hello World!"
+}'
+```
+![image](https://github.com/user-attachments/assets/3979da0f-3dea-4618-a12a-5e5a42e2c2c7)
+
+4. Delete a task by its id:
+  ```
+  curl -X DELETE http://localhost:8080/tasks/123
+
+  ```
+   ![image](https://github.com/user-attachments/assets/d79c6da6-ba7d-4ec1-a23d-5e3f1c0ce5e2)
+
+5. GET tasks by name (Search Tasks by Name)
+    To find tasks that contain the string "Print" in their name:
+
+   ```
+   curl -X GET "http://localhost:8080/tasks/search?name=Print"
+   ```
+
+6.PUT a TaskExecution (Execute a Shell Command)
+    To execute a shell command stored in the task with ID "123" and store the execution result in the taskExecutions list:
+
+```
+curl -X PUT http://localhost:8080/tasks/123/execute
+```
+
+  ![image](https://github.com/user-attachments/assets/020fc626-4aa3-4d0d-ad86-a60dce1533c8)
