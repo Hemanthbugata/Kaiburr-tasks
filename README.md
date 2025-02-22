@@ -31,3 +31,4 @@ All tasks are stored in a **MongoDB** database.
 
 ## **Project Structure**
 
+src/ ├── main/ │ ├── java/ │ │ └── com/ │ │ └── example/ │ │ └── Kaibur_tasks/ │ │ ├── controller/ # API Controllers │ │ │ ├── TaskController.java │ │ │ └── TaskExecutionController.java │ │ ├── model/ # Task and TaskExecution Models │ │ │ ├── Task.java │ │ │ └── TaskExecution.java │ │ ├── repository/ # MongoDB Repositories │ │ │ └── TaskRepository.java │ │ └── service/ # Business Logic │ │ ├── TaskService.java │ │ └── TaskExecutionService.java │ ├── resources/ │ │ └── application.properties # MongoDB Configuration ├── pom.xml # Maven Dependencies
