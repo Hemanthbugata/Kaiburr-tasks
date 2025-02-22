@@ -16,7 +16,7 @@
 	<name>Kaibur-tasks</name>
 	<description>Task Management Application with Shell Command Execution</description>
 	<properties>
-		<java.version>21</java.version> <!-- You can update this to the correct Java version if needed -->
+		<java.version>17</java.version> <!-- You can update this to the correct Java version if needed -->
 	</properties>
 
 	<dependencies>
@@ -47,6 +47,12 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+   			<groupId>io.kubernetes</groupId>
+    		<artifactId>client-java</artifactId>
+    		<version>16.0.1</version> <!-- use the latest stable version -->
+		</dependency>
+		
 		<!-- Lombok for reducing boilerplate code in POJOs -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
