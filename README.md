@@ -161,4 +161,173 @@ curl -X PUT http://localhost:8080/tasks/123/execute
 
   ![image](https://github.com/user-attachments/assets/020fc626-4aa3-4d0d-ad86-a60dce1533c8)
 
-# **Kaibur Task-2 with Kubernetes & API end point **
+# **Kaibur Task-2 Docker and Kubernetes Deployment with MongoDB Integration
+  # Overview
+  
+ In this task, we will:
+
+Build a Docker image for the Spring Boot application.
+Use Kubernetes YAML manifests to deploy the application and MongoDB in separate pods.
+Ensure the application takes MongoDB connection details from environment variables.
+Expose the app endpoints to be accessible from the host machine.
+Set up a persistent volume for MongoDB so that data is retained even if the MongoDB pod is deleted.
+
+# 1. Dockerfile for Spring Boot Application
+We start by creating a Dockerfile for the Spring Boot application. This will build the application image, which can then be used in the Kubernetes deployment.
+
+```
+ FROM openjdk:17-jdk-slim
+
+WORKDIR /app
+
+COPY target/Kaibur-tasks-0.0.1-SNAPSHOT.jar app.jar
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
+```
+
+  Build docker image with docker file 
+
+    ```
+      docker build -t kaibur-tasks:latest .
+    ```
+  Now run the docker image and pull the mongo image and run them both under a docker network named spring-network.
+
+  ```
+    docker create network spring-network
+
+    docker run -d --name mongo --network spring-network -p 27018:27017 mongo:latest
+
+    docker run --name kaibur-tasks --rm --network spring-network -p 8080:8080 -e MONGO_URL=mongodb://mongo:27018/taskdb kaibur-tasks:latest
+```
+we have a docker network and let the local host connect with the mongo so we make this connection to fetch data from mongo and data flow to container with port 8080
+
+# 2. Kubernetes YAML Manifests for Deploy 
+
+  Now, we will create Kubernetes manifests to deploy the application and MongoDB in separate pods. The manifests will ensure the app takes MongoDB connection details from the environment variables and expose the app      endpoints to the host machine.ent and Services.
+
+  * deployment.yaml
+    
+```
+     apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: kaibur-tasks-deployment
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: kaibur-tasks
+      template:
+        metadata:
+          labels:
+            app: kaibur-tasks
+        spec:
+          containers:
+            - name: kaibur-tasks
+              image: kaibur-tasks:latest   # Replace with your Docker image name
+              ports:
+                - containerPort: 8080
+          env:
+            - name: SPRING_DATA_MONGODB_URI
+              value: "mongodb://mongodb-service:27017/taskdb"  # MongoDB URI (Service name used in Kubernetes)
+```
+* mongo-deployment.yaml
+
+```
+  # mongo-deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+      - name: mongo
+        image: mongo:latest
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - name: mongo-data
+          mountPath: /data/db
+     volumes:
+      - name: mongo-data
+        persistentVolumeClaim:
+          claimName: mongo-pvc
+```
+
+MongoDB Deployment: The MongoDB pod is deployed with a persistent volume to store data. It ensures that data persists even if the pod is restarted or deleted.
+
+Spring Boot Deployment: The Spring Boot application is configured to use the MongoDB service (mongodb://mongo:27017/taskdb) via an environment variable.
+
+
+# 3.MongoDB Running in a Separate Pod
+  Persistent Volume for MongoDB Data:
+  
+  To ensure MongoDB data is persistent and remains intact even if the MongoDB pod is deleted or      recreated, we use a PersistentVolumeClaim (PVC). This is defined in the mongo-deployment.yaml      as follows:
+  
+  The PersistentVolumeClaim (PVC) ensures that the MongoDB data is persistent across pod restarts.
+
+  mongodb-pvc.yaml
+
+  ```
+   #mongo-pvc.yaml
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  ```  
+  
+# 4.Expose Application Endpoints from the Host Machine
+
+  * Service.yaml
+```
+# mongo-service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+spec:
+  selector:
+    app: mongo
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+  clusterIP: None  # Headless service, to be used for communication with the app
+
+---
+# app-service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: kaibur-tasks
+spec:
+  selector:
+    app: kaibur-tasks
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer  # You can also use NodePort or ClusterIP depending on your Kubernetes setup
+```
+  Service: The Spring Boot application is exposed via a LoadBalancer service, which will allow you to access it on port 8080.
