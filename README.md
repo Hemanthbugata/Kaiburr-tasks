@@ -203,6 +203,14 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 ```
 we have a docker network and let the local host connect with the mongo so we make this connection to fetch data from mongo and data flow to container with port 8080
 
+Output Files :
+
+  ![image](https://github.com/user-attachments/assets/deb26d0e-c3bd-470f-8b79-76132df0b411)
+
+  ![image](https://github.com/user-attachments/assets/9dbff2dd-e2c0-455c-85b0-46b664212ca9)
+
+
+
 # 2. Kubernetes YAML Manifests for Deploy 
 
   Now, we will create Kubernetes manifests to deploy the application and MongoDB in separate pods. The manifests will ensure the app takes MongoDB connection details from the environment variables and expose the app      endpoints to the host machine.ent and Services.
@@ -331,3 +339,29 @@ spec:
   type: LoadBalancer  # You can also use NodePort or ClusterIP depending on your Kubernetes setup
 ```
   Service: The Spring Boot application is exposed via a LoadBalancer service, which will allow you to access it on port 8080.
+
+  # Deployment Steps
+  
+  Apply the YAML Manifests: To deploy the application and MongoDB, apply the YAML manifests to your Kubernetes cluster:
+
+  ```
+    minikube start 
+    kubectl apply -f deployment.yaml
+    kubectl apply -f mongo-deployment.yaml
+    kubectl apply -f mongo-pvc.yaml
+    kubectl apply -f service.yaml 
+```
+Verify Pods and services are running :
+
+  ```
+    kubectl get pods
+    kubectl get services
+```
+
+output files :
+
+  ![image](https://github.com/user-attachments/assets/49ee492a-7651-4bc2-a734-fb06e1ef780b)
+
+  ![image](https://github.com/user-attachments/assets/3af12910-b7ff-438f-b78f-1286ec432042)
+
+
