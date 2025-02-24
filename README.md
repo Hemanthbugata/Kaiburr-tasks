@@ -106,8 +106,11 @@ For a local instance, the default configuration will be: in src/resource/applica
 
 ## output 
 
-  ``
-    ![image](https://github.com/user-attachments/assets/ffb35d09-39e3-4591-8981-30261390f1b4)
+  
+  ![image](https://github.com/user-attachments/assets/ffb35d09-39e3-4591-8981-30261390f1b4)
+
+  ![image](https://github.com/user-attachments/assets/a733c96d-d21c-412e-90e3-7413558537c4)
+
 
 
 ## List of end-points 
@@ -189,9 +192,9 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 
   Build docker image with docker file 
 
-    ```
+    
       docker build -t kaibur-tasks:latest .
-    ```
+    
   Now run the docker image and pull the mongo image and run them both under a docker network named spring-network.
 
   ```
